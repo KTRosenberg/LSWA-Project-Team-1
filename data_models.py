@@ -40,7 +40,7 @@ class BookListing(models.model):
     ...has one edition
     ...is one of either hardcover, softcover, or unknown
     """
-    isbn_13   = models.CharField(max_length=13, db_index=True, max_length=13, validators=[MinLengthValidator(13)]) # comment line 4: like this?
+    isbn_13   = models.CharField(max_length=13, db_index=True, validators=[MinLengthValidator(13)]) # comment line 4: like this?
     price     = models.DecimalField(decimal_places=2) # comment line 5
     condition = models.CharField(max_length=32) 
     seller    = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -101,7 +101,7 @@ class IsbnSalesTotal(models.model):
     ...has one dollar amount
     ...has one number of copies sold
     """
-    isbn_13   = models.CharField(max_length=13, primary_key=True, db_index=True, max_length=13, validators=[MinLengthValidator(13)])
+    isbn_13   = models.CharField(max_length=13, primary_key=True, db_index=True, validators=[MinLengthValidator(13)])
     
     copies_sold_NEW      = models.PositiveIntegerField()
     copies_sold_LIKE_NEW = models.PositiveIntegerField()
