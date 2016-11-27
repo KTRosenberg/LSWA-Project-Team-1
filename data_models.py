@@ -3,8 +3,6 @@ from django.db import models
 from django import forms
 from django.core.exceptions import ValidationError
 import django.core.validators 
-from django.utils.translation import ugettext_lazy as # do I need this?
-
 
 # Karl Toby Rosenberg, data model drafts ver 2, took Kate's suggestions
 
