@@ -60,7 +60,6 @@ class BookListing(models.model):
     )
     cover_type = models.CharField(max_length=1, choices=COVER_TYPE_CHOICES, default=UNKNOWN)
     
-    
     # CONDITION TYPE
     NEW      = '5'
     LIKE_NEW = '4'
