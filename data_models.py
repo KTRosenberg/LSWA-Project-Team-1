@@ -67,7 +67,6 @@ class BookListing(models.model):
     GOOD     = '3
     FAIR     = '2'
     POOR     = '1'
-        
     CONDITION_TYPE_CHOICES = (
         (NEW,'new'),
         (LIKE_NEW, 'like new'),
