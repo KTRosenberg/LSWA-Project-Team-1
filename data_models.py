@@ -79,7 +79,7 @@ class BookListing(models.model):
 
 class Location(models.model):
     """   
-    A city ( I named this Location since maybe the user doesn't necessarily live in a city )
+    A location (e.g. city, town)
     ...has one name
     """
     name = models.CharField(max_length=64, db_index=True)
