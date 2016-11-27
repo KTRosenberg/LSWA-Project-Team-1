@@ -52,13 +52,13 @@ class BookListing(models.model):
     # hardcover, softcover, or unknown
     HARDCOVER = 'H'
     SOFTCOVER = 'S'
-    UNKNOWN   = None # not sure if it accepts None as an option
+    UNKNOWN   = 'U'
     COVER_TYPE_CHOICES = (
         (HARDCOVER, 'hardcover'),
         (SOFTCOVER, 'softcover'),
         (UNKNOWN,   'unknown')
     )
-    cover_type = models.CharField(max_length=9, choices=COVER_TYPE_CHOICES, default=UNKNOWN)
+    cover_type = models.CharField(max_length=1, choices=COVER_TYPE_CHOICES, default=UNKNOWN)
     
     
     # CONDITION TYPE
@@ -69,11 +69,11 @@ class BookListing(models.model):
     POOR     = '1'
         
     CONDITION_TYPE_CHOICES = (
-        (NEW,'5'),
-        (LIKE_NEW, '4'),
-        (GOOD, '3'),
-        (FAIR, '2'),
-        (POOR, '1')
+        (NEW,'new'),
+        (LIKE_NEW, 'like new'),
+        (GOOD, 'good'),
+        (FAIR, 'fair'),
+        (POOR, 'poor')
     )
     condition = models.CharField(max_length=1, choices=CONDITION_TYPE_CHOICES, blank=False)
 
