@@ -2,37 +2,30 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
 
-def get_listings_for_isbn(request):
-	isbn_listings = []
+def get_isbn_listing_view(request):
+	isbn_listing_info_out = []
 		
 	if len(arg_dict) == 0:
-		return render(request, 'book_exchange/listing', isbn_listings)
-		
-	book_listings_data = []
-	user_location = None
-	
+		return HttpResponse("Invalid number of arguments")
+			
 	valid_filter_dict = get_valid_filter_dict(request.GET)
 	
 	if len(valid_filter_dict) == 0:
-		return render(request, 'book_exchange/listing', isbn_listings) # ??
+		return HttpResponse("Invalid arguments provided")
 		
 	if request.user.is_authenticated() and request.user.id:
 		try:
       		user_profile = UserProfile.objects.get(user_id=request.user.id) # ??
-    	except UserProfile.DoesNotExist: # ??
-    		return render(request, 'book_exchange/listing', isbn_listings) # ??
-    	
+    	except UserProfile.DoesNotExist:
+			return HttpResponse("Invalid user profile")	
 		valid_dict['location'] = user_profile.location
 		
-		# somehow add the location to the dictionary so the filter just receives the dict?
-		book_listings_data = BookListing.objects.filter(location, **valid_filter_dict)
-	else:
-		book_listings_data = BookListing.objects.filter(**valid_filter_dictarg_dict)
+	book_listings = BookListing.objects.filter(**valid_filter_dictarg_dict)
 	
-	for book_listing in book_listings_data:
-		isbn_listings.append((book_listing.seller, book_listing.price, book_listing.condition))
+	for book_listing in book_listings:
+		isbn_listing_info_out.append((book_listing.seller, book_listing.price, book_listing.condition))
 		
-	return render(request, 'book_exchange/listing', isbn_listings)
+	return render(request, 'book_exchange/listing', isbn_listing_info_out)
 
 def get_valid_filter_dict(input_dict):
 	# Title (optional), Author (optional), ISBN (optional) (must specify at least one)
