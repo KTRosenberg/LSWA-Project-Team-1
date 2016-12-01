@@ -13,7 +13,7 @@ def get_listings_for_isbn(request):
 	
 	valid_filter_dict = get_valid_filter_dict(request.GET)
 	
-	if valid_dict == None:
+	if len(valid_filter_dict) <= 0:
 		return render(request, 'book_exchange/listing', isbn_listings)
 	
 	if request.user.is_authenticated() and request.user.id:
@@ -21,9 +21,9 @@ def get_listings_for_isbn(request):
 		user_location = User.location # I don't know how to separate auth user and our User...
 		
 		# somehow add the location to the dictionary so the filter just receives the dict?
-		book_listings_data = BookListing.objects.filter(location, arg_dict)
+		book_listings_data = BookListing.objects.filter(location, **valid_filter_dict)
 	else:
-		book_listings_data = BookListing.objects.filter(arg_dict)
+		book_listings_data = BookListing.objects.filter(**valid_filter_dictarg_dict)
 	
 	for book_listing in book_listings_data:
 		isbn_listings.append((book_listing.seller, book_listing.price, book_listing.condition))
@@ -31,7 +31,6 @@ def get_listings_for_isbn(request):
 
 def get_valid_filter_dict(input_dict):
 	# Title (optional), Author (optional), ISBN (optional) (must specify at least one)
-	has_enough_args = False
 	valid_arg_list = ['title', 'author', 'isbn_13']
 	valid_filter_dict = {}
 	
