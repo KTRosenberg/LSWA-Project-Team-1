@@ -15,7 +15,7 @@ City
 Sales total (per ISBN-13)
 """
 
-class User(models.model):
+class UserProfile(models.model):
     """
     A user
     ...has one name
