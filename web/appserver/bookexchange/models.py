@@ -1,5 +1,6 @@
 # data model drafting
 from django.db import models
+from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
 import django.core.validators 
@@ -22,6 +23,7 @@ class UserProfile(models.model):
     ...has one city (foreign key)
     ...has one email address
     """
+    user_id  = models.BigIntegerField(primary_key=True)
     name     = models.CharField(max_length=64)
     location = models.ForeignKey(Location, on_delete=models.PROTECT) # comment line 1
     email    = models.EmailField(unique=True) # comment line 2
