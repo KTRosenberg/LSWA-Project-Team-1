@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
@@ -227,6 +229,7 @@ Output: None
 Side Effects: Creates a user record
 Authentication: Not required (but needs email confirmation)
 """
+	 
 ##########################################################################################
 """
 Update Account Information
@@ -235,6 +238,46 @@ Output: None
 Side Effects: Updates a user record
 Authentication: Required
 """
+def update_account_information(request):
+	user_profile = UserProfile.objects.get(user_id=request.user.id)
+	
+	something_to_change = False
+	
+	try:
+		name = request.GET.get('name')
+	except KeyError:
+		pass
+	else:
+		something_to_change = True
+		user_profile.name = name
+		
+		# do we change this? request.user.username = name # ?????
+	
+	try:
+		location = request.GET.get('location')
+	except KeyError:
+		pass
+	else:
+		something_to_change = True
+		user_profile.location = location
+
+
+	try:
+		email = request.GET.get('email')
+	except KeyError:
+		pass
+	else:
+		something_to_change = True
+		user_profile.email = email
+
+	if something_to_change:
+		return HttpResponse("user information changed")
+	else
+		return HttpResponse("Nothing to change")
+
+		
+	
+	
 ##########################################################################################
 
 
