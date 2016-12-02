@@ -154,7 +154,7 @@ def see_own_book_listings(request):
 		
 ##########################################################################################
 
-def de_list_book(request):
+def delist_book(request):
 	if request.user.is_authenticated() and request.user.id:
 		try:
 			seller_profile = UserProfile.objects.get(user_id=request.user.id)
@@ -162,52 +162,42 @@ def de_list_book(request):
 			return HttpResponse("Seller's user profile does not exist")
 			
 		try:
-      		isbn_13 = request.GET.get("isbn_13") # somehow map the ISBN to the title for the email?
-    	except KeyError:
-			return HttpResponse("ISBN does not exist")
-			
+			book_to_delist = request.GET.get("BookListing")
+		except KeyError:
+			return HttpResponse("Book listing does not exist")
+					
 		try:
       		is_sold = request.GET.get("is_sold")
     	except KeyError:
 			return HttpResponse("no such information available")
-			
-		# returns a list, so duplicates possible?
-		try:
-			book_listings = BookListing.objects.filter(seller=seller_profile, isbn_13=isbn_13)
-		except BookListing.DoesNotExist:
-			return HttpResponse("No such book listing to de-list")
-		
-		if len(book_listings) == 0:
-			return HttpResponse("Nothing to de-list")
 
-		book_to_delist = book_listings[0]
 		if is_sold:
 			# update sales total
 			# if something fails here will we have to reverse all changes?
 			try:
+				isbn_13     = book_to_delist.isbn_13
+				condition   = book_to_delist.condition
+				price       = book_to_delist.price
 				sales_total = IsbnSalesTotal.objects.get(isbn_13=isbn_13)
 			except IsbnSalesTotal.DoesNotExist:
 				return HttpResponse("Sales total cannot be found, de-listing failed")
-				
-			condition = sales_total.condition
-			price     = sales_total.price
-			
-			# TODO : make this more generic (non-hard coded in case options are changed
+							
+			# TODO : make this more generic (non-hard coded in case choices are changed)
 			if condition == IsbnSalesTotal.NEW:
 				sales_total.copies_sold_NEW += 1
-				sales_total.total_sales_amount_NEW += book_to_delist.price
+				sales_total.total_sales_amount_NEW += price
 			elif condition == IsbnSalesTotal.LIKE_NEW:
 				sales_total.copies_sold_LIKE_NEW += 1
-				sales_total.total_sales_amount_LIKE_NEW += book_to_delist.price
+				sales_total.total_sales_amount_LIKE_NEW += price
 			elif condition == IsbnSalesTotal.GOOD:
 				sales_total.copies_sold_GOOD += 1
-				sales_total.total_sales_amount_GOOD += book_to_delist.price
+				sales_total.total_sales_amount_GOOD += price
 			elif condition == IsbnSalesTotal.FAIR:
 				sales_total.copies_sold_FAIR += 1
-				sales_total.total_sales_amount_FAIR += book_to_delist.price
+				sales_total.total_sales_amount_FAIR += price
 			elif condition == IsbnSalesTotal.POOR:
 				sales_total.copies_sold_POOR += 1
-				sales_total.total_sales_amount_POOR += book_to_delist.price
+				sales_total.total_sales_amount_POOR += price
 			else:
 				return HttpResponse('Sales total error with "condition", de-listing failed')
 			sales_total.total_copies_sold_ALL += 1
@@ -216,5 +206,3 @@ def de_list_book(request):
 		book_to_delist.delete()	
 	else:
 		return HttpResponse("Not authenticated")	
-
-
