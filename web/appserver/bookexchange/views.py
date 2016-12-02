@@ -212,28 +212,29 @@ def delist_book(request):
 		
 ##########################################################################################
 
+"""
 See Suggested Price
 Parameters: ISBN, Condition
 Output: a price.
 Side Effects: None
 Authentication: Not required.
-
+"""
 ##########################################################################################
-
+"""
 Register an Account
 Parameters: Name, Location, Email
 Output: None
 Side Effects: Creates a user record
 Authentication: Not required (but needs email confirmation)
-
+"""
 ##########################################################################################
-
+"""
 Update Account Information
 Parameters: User, Name, Location, Email
 Output: None
 Side Effects: Updates a user record
 Authentication: Required
-
+"""
 ##########################################################################################
 
 
