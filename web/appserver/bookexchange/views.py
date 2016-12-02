@@ -80,4 +80,35 @@ def send_purchase_request_email(request):
 		
 ##########################################################################################
 
-	
+def list_a_book(request):
+	if request.user.is_authenticated() and request.user.id:
+		# TODO
+		# issue a call to the books API to retrieve title, author, edition
+		
+		isbn_13   = request.GET.get('isbn_13')
+		price     = request.GET.get('price')
+		condition = request.GET.get('condition')
+		title = ....
+		author = ....
+		edition = ....
+		
+		try
+			seller_profile = UserProfile.objects.get(user_id=request.user.id)
+    	except UserProfile.DoesNotExist:
+			return HttpResponse("Seller's user profile does not exist")
+			
+		book_listing = models.BookListing(
+			isbn_13=isbn_13, 
+			price=price, 
+			condition=condition,
+			seller=seller_profile,
+			title=title,
+			author=author,
+			edition=edition 
+		)
+		book_listing.save()
+		
+		return HttpResponse("Success")
+	else:
+		return HttpResponse("Not authenticated")
+
