@@ -115,4 +115,3 @@ class IsbnSalesTotal(models.model):
     
     # would this allow us to display the best sellers in exchange for another field?
     total_copies_sold_ALL = models.PositiveIntegerField(db_index=True) 
-    
