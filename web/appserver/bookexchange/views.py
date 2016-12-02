@@ -221,6 +221,21 @@ Output: a price.
 Side Effects: None
 Authentication: Not required.
 """
+"""
+TODO: price suggestion
+def see_suggested_price(request):
+	try:
+		isbn_13 = request.GET.get("isbn_13")
+	except KeyError:
+		return HttpResponse("no such information available")
+	try:
+		condition = request.GET.get("condition")
+	except KeyError:
+		return HttpResponse("no such information available")
+		
+	# get suggested price using isbn_13 and condition 
+
+"""
 ##########################################################################################
 """
 Register an Account
@@ -239,47 +254,43 @@ Side Effects: Updates a user record
 Authentication: Required
 """
 def update_account_information(request):
-	user_profile = UserProfile.objects.get(user_id=request.user.id)
+	if request.user.is_authenticated() and request.user.id:
+		user_profile = UserProfile.objects.get(user_id=request.user.id)
 	
-	something_to_change = False
+		something_to_change = False
 	
-	try:
-		name = request.GET.get('name')
-	except KeyError:
-		pass
-	else:
-		something_to_change = True
-		user_profile.name = name
+		try:
+			name = request.GET.get('name')
+		except KeyError:
+			pass
+		else:
+			something_to_change = True
+			user_profile.name = name
 		
-		# do we change this? request.user.username = name # ?????
+			# do we change this? request.user.username = name # ?????
 	
-	try:
-		location = request.GET.get('location')
-	except KeyError:
-		pass
+		try:
+			location = request.GET.get('location')
+		except KeyError:
+			pass
+		else:
+			something_to_change = True
+			user_profile.location = location
+
+
+		try:
+			email = request.GET.get('email')
+		except KeyError:
+			pass
+		else:
+			something_to_change = True
+			user_profile.email = email
+
+		if something_to_change:
+			return HttpResponse("user information changed")
+		else
+			return HttpResponse("Nothing to change")
 	else:
-		something_to_change = True
-		user_profile.location = location
-
-
-	try:
-		email = request.GET.get('email')
-	except KeyError:
-		pass
-	else:
-		something_to_change = True
-		user_profile.email = email
-
-	if something_to_change:
-		return HttpResponse("user information changed")
-	else
-		return HttpResponse("Nothing to change")
-
+		return HttpResponse("Not authenticated")
 		
-	
-	
 ##########################################################################################
-
-
-
-	
