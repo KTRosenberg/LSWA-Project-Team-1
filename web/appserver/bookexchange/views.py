@@ -287,6 +287,7 @@ def update_account_information(request):
 			user_profile.email = email
 
 		if something_to_change:
+			user_profile.save()
 			return HttpResponse("user information changed")
 		else
 			return HttpResponse("Nothing to change")
