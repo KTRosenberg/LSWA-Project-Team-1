@@ -65,7 +65,7 @@ def send_purchase_request_email(request):
 
 		send_mail(
 			"Book sale inquiry", 
-			"%s would like to buy your copy of %s. Please email them at %s.",
+			"%s would like to buy your copy of %s. Please email them at %s." % (inquirer_profile.name, book_title, inquirer_profile.email,)
 			inquirer_profile.email, # but this is an email field--can I do this?
 			[seller_profile.email],
 			auth_user=request.user
