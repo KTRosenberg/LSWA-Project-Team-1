@@ -82,6 +82,13 @@ def send_purchase_request_email(request):
 
 def list_a_book(request):
 	if request.user.is_authenticated() and request.user.id:
+	
+		try
+			seller_profile = UserProfile.objects.get(user_id=request.user.id)
+    	except UserProfile.DoesNotExist:
+			return HttpResponse("Seller's user profile does not exist")
+			
+			
 		# TODO
 		# issue a call to the books API to retrieve title, author, edition
 		
@@ -92,11 +99,6 @@ def list_a_book(request):
 		author = ....
 		edition = ....
 		
-		try
-			seller_profile = UserProfile.objects.get(user_id=request.user.id)
-    	except UserProfile.DoesNotExist:
-			return HttpResponse("Seller's user profile does not exist")
-			
 		book_listing = models.BookListing(
 			isbn_13=isbn_13, 
 			price=price, 
@@ -111,4 +113,26 @@ def list_a_book(request):
 		return HttpResponse("Success")
 	else:
 		return HttpResponse("Not authenticated")
+		
+##########################################################################################
+
+def see_own_book_listings(request):
+	if request.user.is_authenticated() and request.user.id:	
+		try
+			seller_profile = UserProfile.objects.get(user_id=request.user.id)
+		except UserProfile.DoesNotExist:
+			return HttpResponse("Seller's user profile does not exist")	
+					
+		try:
+			own_book_listings = BookListing.objects.filter(seller=seller_profile)
+		except BookListing.DoesNotExist:
+			return HttpResponse("Book listings do not exist for this user")
+		
+		return 	return render(request, 'book_exchange/personallistings', own_book_listings)
+	else:
+		return HttpResponse("Not authenticated")
+		
+##########################################################################################
+
+
 
