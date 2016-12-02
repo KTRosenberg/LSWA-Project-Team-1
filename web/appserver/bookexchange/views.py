@@ -119,11 +119,11 @@ def list_a_book(request):
     			copies_sold_GOOD=0,
     			copies_sold_FAIR=0,
     			copies_sold_POOR=0,
-    			total_sales_amount_NEW=0,
-    			total_sales_amount_LIKE_NEW=0,
-    			total_sales_amount_GOOD=0,
-    			total_sales_amount_FAIR=0,
-    			total_sales_amount_POOR=0,
+    			total_sales_amount_NEW=0.00,
+    			total_sales_amount_LIKE_NEW=000,
+    			total_sales_amount_GOOD=0.00,
+    			total_sales_amount_FAIR=0.00,
+    			total_sales_amount_POOR=0.00,
 				total_copies_sold_ALL=0
 			)
 					
@@ -175,12 +175,13 @@ def delist_book(request):
 			# update sales total
 			# if something fails here will we have to reverse all changes?
 			try:
-				isbn_13     = book_to_delist.isbn_13
-				condition   = book_to_delist.condition
-				price       = book_to_delist.price
 				sales_total = IsbnSalesTotal.objects.get(isbn_13=isbn_13)
 			except IsbnSalesTotal.DoesNotExist:
 				return HttpResponse("Sales total cannot be found, de-listing failed")
+			
+			isbn_13   = book_to_delist.isbn_13
+			condition = book_to_delist.condition
+			price     = book_to_delist.price
 							
 			# TODO : make this more generic (non-hard coded in case choices are changed)
 			if condition == IsbnSalesTotal.NEW:
