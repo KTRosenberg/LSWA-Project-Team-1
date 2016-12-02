@@ -79,6 +79,7 @@ def send_purchase_request_email(request):
 		
 ##########################################################################################
 
+""" TODO (requires calls to ISBN/BOOK API
 def list_a_book(request):
 	if request.user.is_authenticated() and request.user.id:
 	
@@ -133,6 +134,7 @@ def list_a_book(request):
 		return HttpResponse("Success")
 	else:
 		return HttpResponse("Not authenticated")
+"""
 		
 ##########################################################################################
 
@@ -206,4 +208,34 @@ def delist_book(request):
 		# only delete if unsold or sold and updated successfully ?
 		book_to_delist.delete()	
 	else:
-		return HttpResponse("Not authenticated")	
+		return HttpResponse("Not authenticated")
+		
+##########################################################################################
+
+See Suggested Price
+Parameters: ISBN, Condition
+Output: a price.
+Side Effects: None
+Authentication: Not required.
+
+##########################################################################################
+
+Register an Account
+Parameters: Name, Location, Email
+Output: None
+Side Effects: Creates a user record
+Authentication: Not required (but needs email confirmation)
+
+##########################################################################################
+
+Update Account Information
+Parameters: User, Name, Location, Email
+Output: None
+Side Effects: Updates a user record
+Authentication: Required
+
+##########################################################################################
+
+
+
+	
