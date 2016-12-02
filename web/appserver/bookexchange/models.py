@@ -1,5 +1,6 @@
 # data model drafting
 from django.db import models
+from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
 import django.core.validators 
@@ -9,19 +10,20 @@ import django.core.validators
 """
 Models
 
-User
+UserProfile
 Book for sale
 City
 Sales total (per ISBN-13)
 """
 
-class User(models.model):
+class UserProfile(models.model):
     """
-    A user
+    A UserProfile
     ...has one name
     ...has one city (foreign key)
     ...has one email address
     """
+    user_id  = models.BigIntegerField(primary_key=True)
     name     = models.CharField(max_length=64)
     location = models.ForeignKey(Location, on_delete=models.PROTECT) # comment line 1
     email    = models.EmailField(unique=True) # comment line 2
@@ -32,7 +34,7 @@ class BookListing(models.model):
     ...has one ISBN-13
     ...has one price
     ...has one condition
-    ...is owned by one user, the seller (foreign key)
+    ...is owned by one UserProfile, the seller (foreign key)
     ...has one title (secondary index)
     ...has one author (secondary index)
     ...has one edition
@@ -41,7 +43,7 @@ class BookListing(models.model):
     isbn_13   = models.CharField(max_length=13, db_index=True, validators=[MinLengthValidator(13)]) # comment line 4: like this?
     price     = models.DecimalField(decimal_places=2) # comment line 5
     condition = models.CharField(max_length=32) 
-    seller    = models.ForeignKey(User, on_delete=models.CASCADE)
+    seller    = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title     = models.CharField(max_length=256, db_index=True)
     author    = models.CharField(max_length=101, db_index=True) # comment line 6
     edition   = models.CharField(max_length=16)
