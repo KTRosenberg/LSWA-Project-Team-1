@@ -63,7 +63,7 @@ class BookListing(models.model):
     # CONDITION TYPE
     NEW      = '5'
     LIKE_NEW = '4'
-    GOOD     = '3
+    GOOD     = '3'
     FAIR     = '2'
     POOR     = '1'
     CONDITION_TYPE_CHOICES = (
@@ -114,5 +114,5 @@ class IsbnSalesTotal(models.model):
     total_sales_amount_POOR      = models.DecimalField(decimal_places=2)
     
     # would this allow us to display the best sellers in exchange for another field?
-    total_sales_amount_ALL = models.DecimalField(decimal_places=2, db_index=True) 
+    total_copies_sold_ALL = models.PositiveIntegerField(db_index=True) 
     
