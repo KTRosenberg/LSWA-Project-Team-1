@@ -44,9 +44,9 @@ def send_purchase_request_email(request):
 	if request.user.is_authenticated() and request.user.id:
 	
 		try:
-      		buyer_profile = request.GET.get("buyer")
+      		inquirer_profile = UserProfile.objects.get(user_id=request.user.id)
     	except UserProfile.DoesNotExist:
-			return HttpResponse("Buyer's user profile does not exist")
+			return HttpResponse("Inquirer's user profile does not exist")
 			
 		try:
       		seller_profile = request.GET.get("seller")
@@ -59,14 +59,14 @@ def send_purchase_request_email(request):
 			return HttpResponse("ISBN does not exist")
 			
 		try:
-			book_title = BookListing.objects.get(title=isbn_13)
+			book_title = BookListing.objects.get(isbn_13=isbn_13).title
 		except BookListing.DoesNotExist:
 			return HttpResponse("No book title matching ISBN exists")	
 
 		send_mail(
 			"Book sale inquiry", 
-			"%s would like to buy your copy of %s. Please email them at %s." % (buyer_profile.name, book_title, buyer_profile.email,),
-			buyer_profile.email, # but this is an email field--can I do this?
+			"%s would like to buy your copy of %s. Please email them at %s." % (inquirer_profile.name, book_title, inquirer_profile.email,),
+			inquirer_profile.email, # but this is an email field--can I do this?
 			[seller_profile.email],
 			auth_user=request.user
 		)
