@@ -44,7 +44,6 @@ def get_valid_filter_dict(input_dict):
 ##########################################################################################
 	
 def send_purchase_request_email(request):
-
 	if request.user.is_authenticated() and request.user.id:
 	
 		try:
@@ -83,7 +82,7 @@ def send_purchase_request_email(request):
 def list_a_book(request):
 	if request.user.is_authenticated() and request.user.id:
 	
-		try
+		try:
 			seller_profile = UserProfile.objects.get(user_id=request.user.id)
     	except UserProfile.DoesNotExist:
 			return HttpResponse("Seller's user profile does not exist")
@@ -108,7 +107,28 @@ def list_a_book(request):
 			author=author,
 			edition=edition 
 		)
+		
+		# test whether a record for this isbn exists
+		try:
+			sales_total = IsbnSalesTotal.objects.get(isbn_13=isbn_13)
+		except IsbnSalesTotal.DoesNotExist:
+			sales_total = models.IsbnSalesTotal(
+				isbn_13=isbn_13,
+				copies_sold_NEW=0,
+    			copies_sold_LIKE_NEW=0,
+    			copies_sold_GOOD=0,
+    			copies_sold_FAIR=0,
+    			copies_sold_POOR=0,
+    			total_sales_amount_NEW=0,
+    			total_sales_amount_LIKE_NEW=0,
+    			total_sales_amount_GOOD=0,
+    			total_sales_amount_FAIR=0,
+    			total_sales_amount_POOR=0,
+				total_copies_sold_ALL=0
+			)
+					
 		book_listing.save()
+		sales_total.save()
 		
 		return HttpResponse("Success")
 	else:
@@ -118,7 +138,7 @@ def list_a_book(request):
 
 def see_own_book_listings(request):
 	if request.user.is_authenticated() and request.user.id:	
-		try
+		try:
 			seller_profile = UserProfile.objects.get(user_id=request.user.id)
 		except UserProfile.DoesNotExist:
 			return HttpResponse("Seller's user profile does not exist")	
@@ -134,5 +154,67 @@ def see_own_book_listings(request):
 		
 ##########################################################################################
 
+def de_list_book(request):
+	if request.user.is_authenticated() and request.user.id:
+		try:
+			seller_profile = UserProfile.objects.get(user_id=request.user.id)
+		except UserProfile.DoesNotExist:
+			return HttpResponse("Seller's user profile does not exist")
+			
+		try:
+      		isbn_13 = request.GET.get("isbn_13") # somehow map the ISBN to the title for the email?
+    	except KeyError:
+			return HttpResponse("ISBN does not exist")
+			
+		try:
+      		is_sold = request.GET.get("is_sold")
+    	except KeyError:
+			return HttpResponse("no such information available")
+			
+		# returns a list, so duplicates possible?
+		try:
+			book_listings = BookListing.objects.filter(seller=seller_profile, isbn_13=isbn_13)
+		except BookListing.DoesNotExist:
+			return HttpResponse("No such book listing to de-list")
+		
+		if len(book_listings) == 0:
+			return HttpResponse("Nothing to de-list")
+
+		book_to_delist = book_listings[0]
+		if is_sold:
+			# update sales total
+			# if something fails here will we have to reverse all changes?
+			try:
+				sales_total = IsbnSalesTotal.objects.get(isbn_13=isbn_13)
+			except IsbnSalesTotal.DoesNotExist:
+				return HttpResponse("Sales total cannot be found, de-listing failed")
+				
+			condition = sales_total.condition
+			price     = sales_total.price
+			
+			# TODO : make this more generic (non-hard coded in case options are changed
+			if condition == IsbnSalesTotal.NEW:
+				sales_total.copies_sold_NEW += 1
+				sales_total.total_sales_amount_NEW += book_to_delist.price
+			elif condition == IsbnSalesTotal.LIKE_NEW:
+				sales_total.copies_sold_LIKE_NEW += 1
+				sales_total.total_sales_amount_LIKE_NEW += book_to_delist.price
+			elif condition == IsbnSalesTotal.GOOD:
+				sales_total.copies_sold_GOOD += 1
+				sales_total.total_sales_amount_GOOD += book_to_delist.price
+			elif condition == IsbnSalesTotal.FAIR:
+				sales_total.copies_sold_FAIR += 1
+				sales_total.total_sales_amount_FAIR += book_to_delist.price
+			elif condition == IsbnSalesTotal.POOR:
+				sales_total.copies_sold_POOR += 1
+				sales_total.total_sales_amount_POOR += book_to_delist.price
+			else:
+				return HttpResponse('Sales total error with "condition", de-listing failed')
+			sales_total.total_copies_sold_ALL += 1
+
+		# only delete if unsold or sold and updated successfully ?
+		book_to_delist.delete()	
+	else:
+		return HttpResponse("Not authenticated")	
 
 
