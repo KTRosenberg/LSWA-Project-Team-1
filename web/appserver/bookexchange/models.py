@@ -3,7 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django import forms
 from django.core.exceptions import ValidationError
-import django.core.validators 
+import django.core.validators
+
 
 # Karl Toby Rosenberg, data model drafts ver 2, took Kate's suggestions
 
@@ -16,7 +17,22 @@ City
 Sales total (per ISBN-13)
 """
 
-class UserProfile(models.model):
+class Location(models.Model):
+    """   
+    A location (e.g. city, town)
+    ...has one name
+    """
+    name = models.CharField(max_length=64, db_index=True)
+    # comment line 23: I am not sure. We could concatenate that information maybe...
+    # otherwise:
+    """
+    city = models.CharField(max_length=64, db_index=True)
+    state = models.CharField(max_length=64, db_index=True)
+    # optional
+    institution = models.CharField(max_length=64, db_index=True, blank=True)
+    """
+
+class UserProfile(models.Model):
     """
     A UserProfile
     ...has one name
@@ -24,11 +40,13 @@ class UserProfile(models.model):
     ...has one email address
     """
     user_id  = models.BigIntegerField(primary_key=True)
+    # or     user  = models.OneToOneField(User, on_delete=models.CASCADE) ??
+
     name     = models.CharField(max_length=64)
     location = models.ForeignKey(Location, on_delete=models.PROTECT) # comment line 1
     email    = models.EmailField(unique=True) # comment line 2
 
-class BookListing(models.model):
+class BookListing(models.Model):
     """
     A book for sale
     ...has one ISBN-13
@@ -40,8 +58,8 @@ class BookListing(models.model):
     ...has one edition
     ...is one of either hardcover, softcover, or unknown
     """
-    isbn_13   = models.CharField(max_length=13, db_index=True, validators=[MinLengthValidator(13)]) # comment line 4: like this?
-    price     = models.DecimalField(decimal_places=2) # comment line 5
+    isbn_13   = models.CharField(max_length=13, db_index=True) # comment line 4: like this?
+    price     = models.DecimalField(decimal_places=2, max_digits=4) # comment line 5
     condition = models.CharField(max_length=32) 
     seller    = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title     = models.CharField(max_length=256, db_index=True)
@@ -75,22 +93,9 @@ class BookListing(models.model):
     )
     condition = models.CharField(max_length=1, choices=CONDITION_TYPE_CHOICES, blank=False)
 
-class Location(models.model):
-    """   
-    A location (e.g. city, town)
-    ...has one name
-    """
-    name = models.CharField(max_length=64, db_index=True)
-    # comment line 23: I am not sure. We could concatenate that information maybe...
-    # otherwise:
-    """
-    city = models.CharField(max_length=64, db_index=True)
-    state = models.CharField(max_length=64, db_index=True)
-    # optional
-    institution = models.CharField(max_length=64, db_index=True, blank=True)
-    """
 
-class IsbnSalesTotal(models.model):
+
+class IsbnSalesTotal(models.Model):
     """
     A sales total
     ...has one publication (i.e., ISBN-13) as its primary key
@@ -99,7 +104,7 @@ class IsbnSalesTotal(models.model):
     ...has one dollar amount
     ...has one number of copies sold
     """
-    isbn_13   = models.CharField(max_length=13, primary_key=True, db_index=True, validators=[MinLengthValidator(13)])
+    isbn_13   = models.CharField(max_length=13, primary_key=True, db_index=True)
     
     copies_sold_NEW      = models.PositiveIntegerField()
     copies_sold_LIKE_NEW = models.PositiveIntegerField()
@@ -107,11 +112,11 @@ class IsbnSalesTotal(models.model):
     copies_sold_FAIR     = models.PositiveIntegerField()
     copies_sold_POOR     = models.PositiveIntegerField()
 
-    total_sales_amount_NEW       = models.DecimalField(decimal_places=2)
-    total_sales_amount_LIKE_NEW  = models.DecimalField(decimal_places=2)
-    total_sales_amount_GOOD      = models.DecimalField(decimal_places=2)
-    total_sales_amount_FAIR      = models.DecimalField(decimal_places=2)
-    total_sales_amount_POOR      = models.DecimalField(decimal_places=2)
+    total_sales_amount_NEW       = models.DecimalField(decimal_places=2, max_digits=4)
+    total_sales_amount_LIKE_NEW  = models.DecimalField(decimal_places=2, max_digits=4)
+    total_sales_amount_GOOD      = models.DecimalField(decimal_places=2, max_digits=4)
+    total_sales_amount_FAIR      = models.DecimalField(decimal_places=2, max_digits=4)
+    total_sales_amount_POOR      = models.DecimalField(decimal_places=2, max_digits=4)
     
     # would this allow us to display the best sellers in exchange for another field?
     total_copies_sold_ALL = models.PositiveIntegerField(db_index=True) 

@@ -129,9 +129,9 @@ def list_a_book(request):
     			total_sales_amount_POOR=0.00,
 				total_copies_sold_ALL=0
 			)
-					
+			sales_total.save()
+		
 		book_listing.save()
-		sales_total.save()
 		
 		return HttpResponse("Success")
 	else:
@@ -244,6 +244,23 @@ Output: None
 Side Effects: Creates a user record
 Authentication: Not required (but needs email confirmation)
 """
+def register_account_information(request):
+	if request.user.is_authenticated() and request.user.id:
+		try:
+			user_profile = UserProfile.objects.get(user_id=request.user.id)
+		except UserProfile.DoesNotExist:
+			location = models.Location(request.GET.get('location'))
+			location.save()
+			a_new_user = models.UserProfile(
+				    user_id=request.user.id
+    				name=request.GET.get('name')
+    				location=location
+    				email= models.EmailField(unique=True) # comment line 2
+			)
+			a_new_user.save()
+		else:
+			return HttpResponse("user already exists")
+
 	 
 ##########################################################################################
 """
@@ -255,8 +272,11 @@ Authentication: Required
 """
 def update_account_information(request):
 	if request.user.is_authenticated() and request.user.id:
-		user_profile = UserProfile.objects.get(user_id=request.user.id)
-	
+		try:
+			user_profile = UserProfile.objects.get(user_id=request.user.id)
+		except UserProfile.DoesNotExist:
+			return HttpResponse("no such user")
+
 		something_to_change = False
 	
 		try:
