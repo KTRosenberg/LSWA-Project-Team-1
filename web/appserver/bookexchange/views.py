@@ -252,9 +252,9 @@ def register_account_information(request):
 			location = models.Location(request.GET.get('location'))
 			location.save()
 			a_new_user = models.UserProfile(
-				    user_id=request.user.id
-    				name=request.GET.get('name')
-    				location=location
+				    user_id=request.user.id,
+    				name=request.GET.get('name'),
+    				location=location,
     				email= models.EmailField(unique=True) # comment line 2
 			)
 			a_new_user.save()
