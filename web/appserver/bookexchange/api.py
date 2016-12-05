@@ -134,22 +134,22 @@ class NoIsbnException(Exception):
     pass
 
 
-# print("author and title")
-# for book in get_books_by_author_and_title("David Lay", "Linear Algebra"):
-# 	print(book)
-# 	print()
-# print()
-# print()
-# print("title")
-# for book in get_books_by_author_and_title("", "Linear Algebra"):
-# 	print(book)
-# 	print()
-# print()
-# print()
-# print("author")
-# for book in get_books_by_author_and_title("David Lay", ""):
-# 	print(book)
-# 	print()
-# print()
-# print()
-# print(get_book_by_isbn(9781447911234))
+print("author and title")
+for book in get_books_by_author_and_title("David Lay", "Linear Algebra"):
+	print(book)
+	print()
+print()
+print()
+print("title")
+for book in get_books_by_author_and_title("", "Linear Algebra"):
+	print(book)
+	print()
+print()
+print()
+print("author")
+for book in get_books_by_author_and_title("David Lay", ""):
+	print(book)
+	print()
+print()
+print()
+print(get_book_by_isbn(9781447911234))
