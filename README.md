@@ -1,1 +1,2 @@
-# LSWA-Project-Team-1
+# LSWA Final Project: Used Book Sales
+
