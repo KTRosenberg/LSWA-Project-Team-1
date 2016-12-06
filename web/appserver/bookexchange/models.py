@@ -16,7 +16,7 @@ City
 Sales total (per ISBN-13)
 """
 
-class UserProfile(models.model):
+class UserProfile(models.Model):
     """
     A UserProfile
     ...has one name
@@ -28,7 +28,7 @@ class UserProfile(models.model):
     location = models.ForeignKey(Location, on_delete=models.PROTECT) # comment line 1
     email    = models.EmailField(unique=True) # comment line 2
 
-class BookListing(models.model):
+class BookListing(models.Model):
     """
     A book for sale
     ...has one ISBN-13
@@ -75,7 +75,7 @@ class BookListing(models.model):
     )
     condition = models.CharField(max_length=1, choices=CONDITION_TYPE_CHOICES, blank=False)
 
-class Location(models.model):
+class Location(models.Model):
     """
     A location (e.g. city, town)
     ...has one name
@@ -90,7 +90,7 @@ class Location(models.model):
     institution = models.CharField(max_length=64, db_index=True, blank=True)
     """
 
-class IsbnSalesTotal(models.model):
+class IsbnSalesTotal(models.Model):
     """
     A sales total
     ...has one publication (i.e., ISBN-13) as its primary key
