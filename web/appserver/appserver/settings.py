@@ -55,7 +55,7 @@ ROOT_URLCONF = 'appserver.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,13 +75,17 @@ WSGI_APPLICATION = 'appserver.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': 'test',
+    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.path.join(BASE_DIR, 'db.postgresql'),
         'USER': 'user',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1', #localhost
-        'PORT': '5432',
+        'PORT': '',
     }
 }
 

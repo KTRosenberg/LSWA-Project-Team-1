@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<h2> Choose the book you're listing for sale: </h2>
+
+<form method="POST" action="/listing_complete">{% csrf_token %}
+
+<table>
+	<thead>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Edition</th>
+		<th>Condition</th>
+		<th>Price</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{% book.title %}</td>
+			<td>{% book.author %}</td>
+			<td>{% book.edition %}</td>
+			<td>
+				<select name="condition">
+					<option value="5">New</option>
+					<option value="4">Like New</option>
+					<option value="3">Good</option>
+					<option value="2">Fair</option>
+					<option value="1">Poor</option>
+				</select>
+			</td>
+			<td> <input type="number" step="0.01" min="0"> </td>
+		</tr>
+	</tbody>
+</table>
+
+<input type="hidden" name="title" value="{% book.title %}">
+<input type="hidden" name="author" value="{% book.author %}">
+<input type="hidden" name="edition" value="{% book.edition %}">
+<input type="hidden" name="isbn" value="{% book.isbn %}">
+
+<br>
+<input type="submit" value="List For Sale">
+</form>
+
+{% endblock %}

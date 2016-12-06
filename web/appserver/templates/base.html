@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Book Exchange</title>
+    </head>
+
+    <body>
+        {% block body_block %}{% endblock %}
+
+		{% if user.is_authenticated %}
+		<br> <br>
+        <a href='/logout'> Logout </a>
+        {% endif %}
+    </body>
+</html>

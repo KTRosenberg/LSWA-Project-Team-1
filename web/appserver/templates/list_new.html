@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<h2> Find the book you're selling by it's ISBN, or by the author and title </h2>
+
+<form method="POST" action="/list_new">{% csrf_token %}
+	ISBN:
+	<input type="text" name='isbn'>
+	<input type="submit" value="Search">
+</form>
+
+<br> <br>
+
+<form method="POST" action="/list_new">{% csrf_token %}
+	Author:
+	<input type="text" name='author'>
+	Title:
+	<input type="text" name='title'>
+
+	<input type="submit" value="Search">
+</form>
+
+
+{% endblock %}

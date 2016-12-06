@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<h1> Hi there {% user.first_name %}! <h1>
+
+<h2> Your books for sale: </h2>
+
+<a href="/list_new"> List a book for sale </a>
+
+<a href="/search"> Search for books to buy </a>
+
+<table>
+	<thead>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Condition</th>
+		<th>Price</th>
+		<th>Sold?</th>
+	</thead>
+	<tbody>
+		{% for book in books %}
+		<tr>
+			<td>{% book.title %}</td>
+			<td>{% book.author %}</td>
+			<td>{% book.condition %}</td>
+			<td>${% book.price %}</td>
+			<td>
+				<form method="POST" action="/sold">{% csrf_token %}
+					<input type="hidden" name="bookId" value="{% book.id %}">
+					<input type="submit" value="Sold">
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
