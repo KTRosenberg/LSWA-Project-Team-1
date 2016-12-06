@@ -60,4 +60,4 @@ Alias /static/ /var/www/site/static/
 EOF
 
 a2ensite appserver
-service apache2 reload
+service apache2 restart
