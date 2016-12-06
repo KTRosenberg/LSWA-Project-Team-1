@@ -42,21 +42,21 @@ class UserProfile(models.Model):
     ...has one city (foreign key)
     ...has one email address
     """
-    user_id  = models.BigIntegerField(primary_key=True)
+    # user_id  = models.BigIntegerField(primary_key=True)
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
 
     # name     = models.CharField(max_length=64)
     location = models.ForeignKey(Location, on_delete=models.PROTECT)
     # email    = models.EmailField(unique=True)
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()
 
 class BookListing(models.Model):
     """

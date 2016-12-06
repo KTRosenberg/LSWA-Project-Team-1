@@ -14,15 +14,15 @@
 	<tbody>
 		{% for book in books %}
 		<tr>
-			<td>{% book.title %}</td>
-			<td>{% book.author %}</td>
-			<td>{% book.edition %}</td>
+			<td>{{ book.title }}</td>
+			<td>{{ book.author }}</td>
+			<td>{{ book.edition }}</td>
 			<td>
 				<form method="POST" action="/finish_listing">{% csrf_token %}
-					<input type="hidden" name="title" value="{% book.title %}">
-					<input type="hidden" name="author" value="{% book.author %}">
-					<input type="hidden" name="edition" value="{% book.edition %}">
-					<input type="hidden" name="isbn" value="{% book.isbn %}">
+					<input type="hidden" name="title" value="{{ book.title }}">
+					<input type="hidden" name="author" value="{{ book.author }}">
+					<input type="hidden" name="edition" value="{{ book.edition }}">
+					<input type="hidden" name="isbn" value="{{ book.isbn }}">
 					<input type="submit" value="Choose">
 				</form>
 			</td>

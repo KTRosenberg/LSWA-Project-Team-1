@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User
 from decimal import Decimal
 # from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from django.core.mail import send_mail
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .api import get_book_by_isbn, get_books_by_author_and_title
 
 # views:
@@ -56,16 +56,25 @@ def contact(request):
 	else:
 		return redirect('home')
 
+def results(request):
+	if request.user.is_authenticated():
+		isbn = request.GET.get('isbn')
+		books_queryset = BookListing.objects.filter(isbn_13=isbn).order_by("price").values()
+		books = [entry for entry in books_queryset]
+		return render(request, 'results.html', { 'books' : books })
+	else:
+		return redirect('home')
+
 def search(request):
 	if request.user.is_authenticated():
 		if request.GET.get('isbn') is not None:
-			isbn = request.POST.get('isbn')
+			isbn = request.GET.get('isbn')
 			book = get_book_by_isbn(isbn)
 			return render(request, 'search.html', { 'books' : [book] })
 		elif request.GET.get('author') is not None:
-			title = request.POST.get('title')
-			author = request.POST.get('author')
-			books = get_books_by_author_and_title(isbn)
+			title = request.GET.get('title')
+			author = request.GET.get('author')
+			books = get_books_by_author_and_title(author, title)
 			return render(request, 'search.html', { 'books' : books })
 		else:
 			return render(request, 'search.html', {})
@@ -127,7 +136,7 @@ def list_new(request):
 			else:
 				title = request.POST.get('title')
 				author = request.POST.get('author')
-				books = get_books_by_author_and_title(isbn)
+				books = get_books_by_author_and_title(author, title)
 				return render(request, 'choose_new.html', {'books': books})
 		else:
 			return render(request, 'list_new.html', {})
@@ -148,7 +157,7 @@ def home(request):
 	if request.user.is_authenticated():
 		books_queryset = BookListing.objects.filter(seller__id = request.user.id).order_by("-title").values()
 		books = [entry for entry in books_queryset]
-		return render(request, 'user.html', {'books': books})
+		return render(request, 'user.html', {'user' : request.user, 'books': books})
 	else:
 		return render(request, 'home.html', {})
 
@@ -157,14 +166,16 @@ def register(request):
 		username = request.POST.get('username')
 		first_name = request.POST.get('first_name')
 		last_name = request.POST.get('last_name')
-		email = request.POST.getlist('email')
+		email = request.POST.getlist('email')[0]
 		location = request.POST.getlist('location')
 		password = request.POST.get('password')
 		loc, created = Location.objects.get_or_create(name=location)
 
-		user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name, location=loc)
+		user = User.objects.create_user(username, email, password, first_name=first_name, last_name=last_name)
 		# user.profile.location=loc
 		# user.save()
+
+		profile = UserProfile(user=user, location=loc)
 
 		user = authenticate(username=username, password=password)
 		if user is not None:
@@ -174,7 +185,7 @@ def register(request):
 	else:
 		return render(request, 'register.html', {})
 
-def login(request):
+def log_in(request):
 	if request.method == "POST":
 		username = request.POST.get('username')
 		password = request.POST.get('password')
@@ -187,7 +198,7 @@ def login(request):
 	else:
 		return render(request, 'login.html', {})
 
-def logout(request):
+def log_out(request):
 	if request.user.is_authenticated():
 		logout(request)
 	return redirect('home')

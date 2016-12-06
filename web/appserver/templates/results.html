@@ -16,14 +16,14 @@
 	<tbody>
 		{% for book in books %}
 		<tr>
-			<td>{% book.title %}</td>
-			<td>{% book.author %}</td>
-			<td>{% book.cover_type %}</td>
-			<td>{% book.condition %}</td>
-			<td>${% book.price %}</td>
+			<td>{{ book.title }}</td>
+			<td>{{ book.author }}</td>
+			<td>{{ book.cover_type }}</td>
+			<td>{{ book.condition }}</td>
+			<td>${{ book.price }}</td>
 			<td>
 				<form method="POST" action="/contact">{% csrf_token %}
-					<input type="hidden" name="bookId" value="{% book.id %}">
+					<input type="hidden" name="bookId" value="{{ book.id }}">
 					<input type="submit" value="Contact Seller to Buy">
 				</form>
 			</td>

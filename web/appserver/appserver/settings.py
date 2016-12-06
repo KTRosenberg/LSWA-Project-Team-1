@@ -75,18 +75,19 @@ WSGI_APPLICATION = 'appserver.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': 'test',
-    # }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.path.join(BASE_DIR, 'db.postgresql'),
-        'USER': 'user',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1', #localhost
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'lswa.db',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     # 'NAME': '"' + os.path.join(BASE_DIR, 'db.postgresql') + '"',
+    #     'NAME' : "/Users/kplajer/Developer/LSWA/LSWAdb",
+    #     'USER': 'lswadb',
+    #     'PASSWORD': 'test',
+    #     'HOST': '127.0.0.1', #localhost
+    #     'PORT': '5432',
+    # }
 }
 
 

@@ -2,7 +2,7 @@
 
 {% block body_block %}
 
-<h2> A message has been sent to {% seller %} informing them of your interest in: </h2>
+<h2> A message has been sent to {{ seller }} informing them of your interest in: </h2>
 
 <table>
 	<thead>
@@ -14,11 +14,11 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>{% book.title %}</td>
-			<td>{% book.author %}</td>
-			<td>{% book.cover_type %}</td>
-			<td>{% book.condition %}</td>
-			<td>{% book.price %}</td>
+			<td>{{ book.title }}</td>
+			<td>{{ book.author }}</td>
+			<td>{{ book.cover_type }}</td>
+			<td>{{ book.condition }}</td>
+			<td>{{ book.price }}</td>
 		</tr>
 	</tbody>
 </table>

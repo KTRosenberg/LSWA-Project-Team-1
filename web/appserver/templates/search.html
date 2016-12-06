@@ -32,11 +32,11 @@
 	<tbody>
 		{% for book in books %}
 		<tr>
-			<td>{% book.title %}</td>
-			<td>{% book.author %}</td>
+			<td>{{ book.title }}</td>
+			<td>{{ book.author }}</td>
 			<td>
-				<form method="GET" action="/listings">
-					<input type="hidden" name="isbn" value="{% book.isbn %}">
+				<form method="GET" action="/results">
+					<input type="hidden" name="isbn" value="{{ book.isbn }}">
 					<input type="submit" value="Find Listings">
 				</form>
 			</td>
