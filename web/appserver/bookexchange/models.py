@@ -106,29 +106,29 @@ class BookListing(models.Model):
     condition = models.CharField(max_length=1, choices=CONDITION_TYPE_CHOICES, blank=False)
 
 
+# removed b/c not actually in DB - in redis
+# class IsbnSalesTotal(models.Model):
+#     """
+#     A sales total
+#     ...has one publication (i.e., ISBN-13) as its primary key
 
-class IsbnSalesTotal(models.Model):
-    """
-    A sales total
-    ...has one publication (i.e., ISBN-13) as its primary key
+#     ...has many conditions, and for each one:
+#     ...has one dollar amount
+#     ...has one number of copies sold
+#     """
+#     isbn_13   = models.CharField(max_length=13, primary_key=True, db_index=True)
 
-    ...has many conditions, and for each one:
-    ...has one dollar amount
-    ...has one number of copies sold
-    """
-    isbn_13   = models.CharField(max_length=13, primary_key=True, db_index=True)
+#     copies_sold_NEW      = models.PositiveIntegerField()
+#     copies_sold_LIKE_NEW = models.PositiveIntegerField()
+#     copies_sold_GOOD     = models.PositiveIntegerField()
+#     copies_sold_FAIR     = models.PositiveIntegerField()
+#     copies_sold_POOR     = models.PositiveIntegerField()
 
-    copies_sold_NEW      = models.PositiveIntegerField()
-    copies_sold_LIKE_NEW = models.PositiveIntegerField()
-    copies_sold_GOOD     = models.PositiveIntegerField()
-    copies_sold_FAIR     = models.PositiveIntegerField()
-    copies_sold_POOR     = models.PositiveIntegerField()
+#     total_sales_amount_NEW       = models.DecimalField(decimal_places=2, max_digits=4)
+#     total_sales_amount_LIKE_NEW  = models.DecimalField(decimal_places=2, max_digits=4)
+#     total_sales_amount_GOOD      = models.DecimalField(decimal_places=2, max_digits=4)
+#     total_sales_amount_FAIR      = models.DecimalField(decimal_places=2, max_digits=4)
+#     total_sales_amount_POOR      = models.DecimalField(decimal_places=2, max_digits=4)
 
-    total_sales_amount_NEW       = models.DecimalField(decimal_places=2, max_digits=4)
-    total_sales_amount_LIKE_NEW  = models.DecimalField(decimal_places=2, max_digits=4)
-    total_sales_amount_GOOD      = models.DecimalField(decimal_places=2, max_digits=4)
-    total_sales_amount_FAIR      = models.DecimalField(decimal_places=2, max_digits=4)
-    total_sales_amount_POOR      = models.DecimalField(decimal_places=2, max_digits=4)
-
-    # would this allow us to display the best sellers in exchange for another field?
-    total_copies_sold_ALL = models.PositiveIntegerField(db_index=True)
+#     # would this allow us to display the best sellers in exchange for another field?
+#     total_copies_sold_ALL = models.PositiveIntegerField(db_index=True)

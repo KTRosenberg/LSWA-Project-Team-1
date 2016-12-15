@@ -6,6 +6,7 @@ from .models import *
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from .api import get_book_by_isbn, get_books_by_author_and_title
+from django.core.cache import cache
 
 # views:
 # landing page / log in
@@ -106,6 +107,8 @@ def listing_complete(request):
 	else:
 		return redirect('home')
 
+# TODO: add redis condition get-ing inside here...
+# also, update the HTML template to show this info!!
 def finish_listing(request):
 	if request.user.is_authenticated():
 		if request.method == "POST":
@@ -143,6 +146,12 @@ def list_new(request):
 	else:
 		return redirect('home')
 
+# (this is when user marks their book as gone)
+# TODO: get this isbn/condition's info from redis
+#		get from BookListing how much the price was
+#		update the redis sales total with this price
+#			and increment number sold
+# ^ do all this *bef0re* you delete the book
 def sold(request):
 	if request.user.is_authenticated():
 		book_id = request.POST.get('bookId')
