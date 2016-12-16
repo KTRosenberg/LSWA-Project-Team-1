@@ -157,6 +157,17 @@ def sold(request):
 		book_id = request.POST.get('bookId')
 		book = BookListing.objects.get(id = book_id).select_related('seller')
 		if book.seller.id == request.user.id:
+			book_isbn = BookListing.objects.get(id = book_id).select_related('isbn_13')
+			book_condition = BookListing.objects.get(id = book_id).select_related('condition')
+			book_price = BookListing.objects.get(id = book_id).select_related('price')
+			book_key = book_isbn + book_condition
+			value = cache.get(book_key)
+			if value == None:
+				cache.set(book_key,{'number_sold':1, 'sales_total': book_price})
+			else:
+				new_number_sold = value['number_sold'] + 1
+				new_sales_total = value['sales_total'] + book_price
+				cache.set(book_key, {'number_sold': new_number_sold, 'sales_total': new_sales_total})
 			book.delete()
 		return redirect('home')
 	else:
