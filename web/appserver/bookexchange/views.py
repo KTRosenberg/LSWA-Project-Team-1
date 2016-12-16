@@ -160,6 +160,8 @@ def sold(request):
 			book_isbn = BookListing.objects.get(id = book_id).select_related('isbn_13')
 			book_condition = BookListing.objects.get(id = book_id).select_related('condition')
 			book_price = BookListing.objects.get(id = book_id).select_related('price')
+			#key values in cache for books will be isbn concatenated with condition
+			#	for ease of programming
 			book_key = book_isbn + book_condition
 			value = cache.get(book_key)
 			if value == None:
