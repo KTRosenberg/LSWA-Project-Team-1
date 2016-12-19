@@ -117,13 +117,50 @@ def finish_listing(request):
 				isbn = request.POST.get('isbn')
 				edition = request.POST.get('edition')
 
+				new = cache.get(isbn + '5')
+				if (new == None):
+					new = "not available"
+				else:
+					new = new['sales_total'] / new['number_sold']
+
+				like_new = cache.get(isbn + '4')
+				if (like_new == None):
+					like_new = "not available"
+				else:
+					like_new = like_new['sales_total'] / like_new['number_sold']
+
+				good = cache.get(isbn + '3')
+				if (good == None):
+					good = "not available"
+				else:
+					good = good['sales_total'] / good['number_sold']
+
+				fair = cache.get(isbn + '2')
+				if (fair == None):
+					fair = "not available"
+				else:
+					fair = fair['sales_total'] / fair['number_sold']
+
+				poor = cache.get(isbn + '1')
+				if (poor == None):
+					poor = "not available"
+				else:
+					poor = poor['sales_total'] / poor['number_sold']
+
 				return render(request, 'finish_listing.html',{ 'book':
 				              {
 				              	'title' : title,
 				              	'author' : author,
 				              	'isbn' : isbn,
 				              	'edition' : edition
-				              }})
+				              }, 'price_suggest' : {
+				              	'new' : new,
+				              	'like_new' : like_new,
+				              	'good' : good,
+				              	'fair' : fair,
+				              	'poor' : poor
+				              }
+				              })
 		else:
 			return redirect('home')
 	else:
@@ -155,11 +192,11 @@ def list_new(request):
 def sold(request):
 	if request.user.is_authenticated():
 		book_id = request.POST.get('bookId')
-		book = BookListing.objects.get(id = book_id).select_related('seller')
+		book = BookListing.objects.get(id = book_id)#.select_related('seller')
 		if book.seller.id == request.user.id:
-			book_isbn = BookListing.objects.get(id = book_id).select_related('isbn_13')
-			book_condition = BookListing.objects.get(id = book_id).select_related('condition')
-			book_price = BookListing.objects.get(id = book_id).select_related('price')
+			book_isbn = book.isbn_13
+			book_condition = book.condition
+			book_price = book.price
 			#key values in cache for books will be isbn concatenated with condition
 			#	for ease of programming
 			book_key = book_isbn + book_condition

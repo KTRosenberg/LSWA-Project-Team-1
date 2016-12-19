@@ -13,3 +13,10 @@ source ~/.virtualenvs/djangodev/bin/activate
 # user: kplayer
 # pwd: [blank]
 # port: 5432
+
+
+# python manage.py runserver
+
+
+# kate1
+# test

@@ -33,6 +33,35 @@
 	</tbody>
 </table>
 
+<table>
+	<thead>
+		<th>Condition</th>
+		<th>Suggested Price</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>New</td>
+			<td>{{ price_suggest.new }}</td>
+		</tr>
+		<tr>
+			<td>Like New</td>
+			<td>{{ price_suggest.like_new }}</td>
+		</tr>
+		<tr>
+			<td>Good</td>
+			<td>{{ price_suggest.good }}</td>
+		</tr>
+		<tr>
+			<td>Fair</td>
+			<td>{{ price_suggest.fair }}</td>
+		</tr>
+		<tr>
+			<td>Poor</td>
+			<td>{{ price_suggest.poor }}</td>
+		</tr>
+	</tbody>
+</table>
+
 <input type="hidden" name="title" value="{{ book.title }}">
 <input type="hidden" name="author" value="{{ book.author }}">
 <input type="hidden" name="edition" value="{{ book.edition }}">
