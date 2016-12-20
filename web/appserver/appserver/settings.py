@@ -89,6 +89,11 @@ DATABASES = {
     }
 }
 
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",

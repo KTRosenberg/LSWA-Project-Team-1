@@ -49,8 +49,8 @@ def send_email(seller, book, user):
 
 def contact(request):
 	if request.user.is_authenticated():
-		bookId = request.GET.get('bookId')
-		book = BookListing.objects.get(id=bookId).select_related('seller')
+		bookId = request.POST.get('bookId')
+		book = BookListing.objects.get(id=bookId)#.select_related('seller')
 		seller = book.seller
 		send_email(seller, book, request.user)
 		return render(request, 'contact_success.html', { 'book' : book, 'seller' : seller.username })
