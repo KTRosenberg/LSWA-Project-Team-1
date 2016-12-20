@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<h2> Search for books to buy: </h2>
+
+<form method="GET" action="/search">
+	ISBN:
+	<input type="text" name='isbn'>
+	<input type="submit" value="Search">
+</form>
+
+<br> <br>
+
+<form method="GET" action="/search">
+	Author:
+	<input type="text" name='author'>
+	Title:
+	<input type="text" name='title'>
+
+	<input type="submit" value="Search">
+</form>
+
+{% if books %}
+<br> <br>
+<table>
+	<thead>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Search?</th>
+	</thead>
+	<tbody>
+		{% for book in books %}
+		<tr>
+			<td>{{ book.title }}</td>
+			<td>{{ book.author }}</td>
+			<td>
+				<form method="GET" action="/results">
+					<input type="hidden" name="isbn" value="{{ book.isbn }}">
+					<input type="submit" value="Find Listings">
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+
+
+{% endblock %}
