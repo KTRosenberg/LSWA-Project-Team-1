@@ -105,7 +105,6 @@ class BookListing(models.Model):
     )
     condition = models.CharField(max_length=1, choices=CONDITION_TYPE_CHOICES, blank=False)
 
-
 # removed b/c not actually in DB - in redis
 # class IsbnSalesTotal(models.Model):
 #     """
